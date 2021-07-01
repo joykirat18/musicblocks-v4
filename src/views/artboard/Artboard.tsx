@@ -30,7 +30,6 @@ export default function (props: IArtboardProps): JSX.Element {
       <h4>Artboard {`(${props.dimensions[0]} × ${props.dimensions[1]})`}</h4>
       <div id="boards">
         <P5Board index={0} />
-        <P5Board index={1} />
       </div>
     </div>
   );
