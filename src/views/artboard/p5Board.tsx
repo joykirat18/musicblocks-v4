@@ -1,5 +1,6 @@
 import p5 from 'p5';
 import { useEffect } from 'react';
+import { rootCertificates } from 'tls';
 
 function sketch0(sketch: p5) {
   // Dummy buttons just to just the functions
@@ -8,6 +9,7 @@ function sketch0(sketch: p5) {
   let moveDownButton: p5.Element;
   let moveRightButton: p5.Element;
   let refreshButton: p5.Element;
+  let rotateButton: p5.Element;
 
   // x and y position of the rectangle that can be controlled by the buttons
   let xPosition = 500;
@@ -19,39 +21,37 @@ function sketch0(sketch: p5) {
   // Stores the rectangle drawn
   let shape: import('p5');
 
-  // Stores the center of the rectangle
-  let centerX: number;
-  let centerY: number;
-
   // how much the rectangle should be displaced in one function call
   let displacement = 15;
+
+  let angle = 0;
 
   /**
    * Move rect left and draw a stroke
    */
   function moveLeft() {
-    extraCanvas.line(centerX, centerY, centerX - displacement, centerY);
+    extraCanvas.line(xPosition, yPosition, xPosition - displacement, yPosition);
     xPosition -= displacement;
   }
   /**
    * Move rect up and draw a stroke
    */
   function moveUp() {
-    extraCanvas.line(centerX, centerY, centerX, centerY - displacement);
+    extraCanvas.line(xPosition, yPosition, xPosition, yPosition - displacement);
     yPosition -= displacement;
   }
   /**
    * Move rect down and draw a stroke
    */
   function moveDown() {
-    extraCanvas.line(centerX, centerY, centerX, centerY + displacement);
+    extraCanvas.line(xPosition, yPosition, xPosition, yPosition + displacement);
     yPosition += displacement;
   }
   /**
    * Move rect right and draw a stroke
    */
   function moveRight() {
-    extraCanvas.line(centerX, centerY, centerX + displacement, centerY);
+    extraCanvas.line(xPosition, yPosition, xPosition + displacement, yPosition);
     xPosition += displacement;
   }
   /**
@@ -59,6 +59,10 @@ function sketch0(sketch: p5) {
    */
   function refresh() {
     extraCanvas.clear();
+  }
+
+  function rotate() {
+    angle += 90;
   }
   // function to render the buttons, called in stup function
   function renderButtons() {
@@ -81,13 +85,18 @@ function sketch0(sketch: p5) {
     refreshButton = sketch.createButton('Refresh');
     refreshButton.mousePressed(refresh);
     refreshButton.position(700, 0);
+
+    rotateButton = sketch.createButton('Rotate 90');
+    rotateButton.mousePressed(rotate);
+    rotateButton.position(800, 0);
   }
   sketch.setup = () => {
     sketch.createCanvas(sketch.windowWidth, sketch.windowHeight);
     extraCanvas = sketch.createGraphics(sketch.windowWidth, sketch.windowHeight);
     extraCanvas.clear();
     sketch.background(0);
-
+    sketch.angleMode(sketch.DEGREES);
+    sketch.rectMode(sketch.CENTER);
     renderButtons();
   };
   sketch.draw = () => {
@@ -97,11 +106,14 @@ function sketch0(sketch: p5) {
 
     sketch.image(extraCanvas, 0, 0);
     sketch.stroke(255);
-    shape = sketch.rect(xPosition, yPosition, 50, 50);
 
-    // Here 25 is used to draw the stroke from the center of the rectangle.
-    centerX = xPosition + 25;
-    centerY = yPosition + 25;
+    // Translate lets you change the point of origin to the rectangle
+    sketch.translate(xPosition, yPosition);
+    // We specify the angle by which we rotate the shape
+    sketch.rotate(angle);
+
+    shape = sketch.rect(0, 0, 50, 100);
+
     shape.stroke(0);
     shape.strokeWeight(5);
     shape.noFill();
