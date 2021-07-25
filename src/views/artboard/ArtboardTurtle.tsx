@@ -2,7 +2,7 @@
 
 import p5 from 'p5';
 import { useEffect } from 'react';
-import { turtle } from '../../models/artboard/Turtle';
+import { turtle1, turtle2 } from '../../models/artboard/Turtle';
 import { getViewportDimensions } from '../../utils/ambience';
 
 // -- model component definition -------------------------------------------------------------------
@@ -16,14 +16,15 @@ const turtleSketch = (sketch: p5) => {
     sketch.rectMode(sketch.CENTER);
     sketch.clear();
     sketch.angleMode(sketch.DEGREES);
+    turtle2.setTurtleX(800);
+    turtle2.setTurtleY(400);
   };
 
   sketch.draw = () => {
     sketch.clear();
-    sketch.translate(turtle.getTurtleX(), turtle.getTurtleY());
-    sketch.rotate(90 - turtle.getTurtleAngle());
 
-    sketch.rect(0, 0, 30, 60);
+    turtle1.render(sketch);
+    turtle2.render(sketch);
   };
 };
 

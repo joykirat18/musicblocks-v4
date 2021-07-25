@@ -91,6 +91,12 @@ export interface ITurtleModel {
     getTurtleAngle: () => number;
     /** set the new angle for turtle */
     setTurleAngle: (angle: number) => void;
+    getTurtleSteps: () => number;
+    getTurleDistance: () => number;
+    getAngleToRotate: () => number;
+    display: (sketch: p5) => void;
+    move: (sketch: p5) => void;
+    render: (sketch: p5) => void;
 }
 
 export interface IArtBoardDrawModel {

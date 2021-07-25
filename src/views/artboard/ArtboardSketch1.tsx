@@ -6,7 +6,7 @@ import { getViewportDimensions } from '../../utils/ambience';
 
 // -- model component definition -------------------------------------------------------------------
 import ArtBoardDraw from '../../models/artboard/ArBoardDraw';
-import { turtle1 } from '../../models/artboard/Turtle';
+import { turtle2 } from '../../models/artboard/Turtle';
 const artBoardDraw = new ArtBoardDraw();
 
 /** This is a setup function.*/
@@ -64,26 +64,26 @@ const Sketch = (sketch: p5) => {
    * @param direction In which direction to draw the line
    */
   function moveForwardPart(i: number, direction: string) {
-    const initialX = turtle1.getTurtleX();
-    const initialY = turtle1.getTurtleY();
+    const initialX = turtle2.getTurtleX();
+    const initialY = turtle2.getTurtleY();
 
     if (direction === 'forward') {
-      const finalX = initialX + turtle1.getTurtleSteps() * sketch.cos(turtle1.getTurtleAngle());
-      const finalY = initialY - turtle1.getTurtleSteps() * sketch.sin(turtle1.getTurtleAngle());
+      const finalX = initialX + turtle2.getTurtleSteps() * sketch.cos(turtle2.getTurtleAngle());
+      const finalY = initialY - turtle2.getTurtleSteps() * sketch.sin(turtle2.getTurtleAngle());
 
       sketch.line(initialX, initialY, finalX, finalY);
 
-      turtle1.setTurtleX(finalX);
-      turtle1.setTurtleY(finalY);
+      turtle2.setTurtleX(finalX);
+      turtle2.setTurtleY(finalY);
     }
     if (direction === 'back') {
-      const finalX = initialX - turtle1.getTurtleSteps() * sketch.cos(turtle1.getTurtleAngle());
-      const finalY = initialY + turtle1.getTurtleSteps() * sketch.sin(turtle1.getTurtleAngle());
+      const finalX = initialX - turtle2.getTurtleSteps() * sketch.cos(turtle2.getTurtleAngle());
+      const finalY = initialY + turtle2.getTurtleSteps() * sketch.sin(turtle2.getTurtleAngle());
 
       sketch.line(initialX, initialY, finalX, finalY);
 
-      turtle1.setTurtleX(finalX);
-      turtle1.setTurtleY(finalY);
+      turtle2.setTurtleX(finalX);
+      turtle2.setTurtleY(finalY);
     }
   }
   /**
@@ -92,11 +92,11 @@ const Sketch = (sketch: p5) => {
    * and vice versa
    */
   function rotateTurtlePart(isNegative: boolean) {
-    const initialAngle = turtle1.getTurtleAngle();
+    const initialAngle = turtle2.getTurtleAngle();
     if (isNegative) {
-      turtle1.setTurleAngle((initialAngle - 1) % 360);
+      turtle2.setTurleAngle((initialAngle - 1) % 360);
     } else {
-      turtle1.setTurleAngle((initialAngle + 1) % 360);
+      turtle2.setTurleAngle((initialAngle + 1) % 360);
     }
   }
   /**
@@ -136,18 +136,18 @@ const Sketch = (sketch: p5) => {
    * Function called in makeArc to arc the arc in n small steps
    * */
   function makeArcSteps(i: number, radius: number) {
-    let initialX = turtle1.getTurtleX();
-    let initialY = turtle1.getTurtleY();
+    let initialX = turtle2.getTurtleX();
+    let initialY = turtle2.getTurtleY();
 
-    let finalX = initialX + radius * sketch.cos(turtle1.getTurtleAngle() + 1);
-    let finalY = initialY - radius * sketch.sin(turtle1.getTurtleAngle() + 1);
+    let finalX = initialX + radius * sketch.cos(turtle2.getTurtleAngle() + 1);
+    let finalY = initialY - radius * sketch.sin(turtle2.getTurtleAngle() + 1);
 
     sketch.line(initialX, initialY, finalX, finalY);
 
-    turtle1.setTurtleX(finalX);
-    turtle1.setTurtleY(finalY);
+    turtle2.setTurtleX(finalX);
+    turtle2.setTurtleY(finalY);
 
-    turtle1.setTurleAngle(turtle1.getTurtleAngle() + 1);
+    turtle2.setTurleAngle(turtle2.getTurtleAngle() + 1);
   }
 
   /**
@@ -163,10 +163,10 @@ const Sketch = (sketch: p5) => {
   }
 
   function rotate() {
-    rotateTurtle(turtle1.getAngleToRotate());
+    rotateTurtle(turtle2.getAngleToRotate());
   }
   function move() {
-    moveForward(turtle1.getTurleDistance() / turtle1.getTurtleSteps(), 'forward');
+    moveForward(turtle2.getTurleDistance() / turtle2.getTurtleSteps(), 'forward');
   }
   function moveInArc() {
     makeArc(90, 5);
@@ -176,15 +176,16 @@ const Sketch = (sketch: p5) => {
     const [width, height]: [number, number] = getViewportDimensions();
     sketch.createCanvas(width, height);
     sketch.clear();
-    moveForwardButton = sketch.createButton('Move');
+    moveForwardButton = sketch.createButton('Move1');
     moveForwardButton.mousePressed(move);
-    moveForwardButton.position(300, 0);
-    rotateButton = sketch.createButton('Rotate');
+    moveForwardButton.position(900, 0);
+    rotateButton = sketch.createButton('Rotate1');
     rotateButton.mousePressed(rotate);
-    rotateButton.position(300, 30);
-    moveInArcButton = sketch.createButton('Arc');
+    rotateButton.position(900, 30);
+    moveInArcButton = sketch.createButton('Arc1');
     moveInArcButton.mousePressed(moveInArc);
-    moveInArcButton.position(400, 30);
+    moveInArcButton.position(1100, 30);
+    artBoardDraw.setStrokeColor(0, 0, 255);
     sketch.angleMode(sketch.DEGREES);
   };
 
@@ -192,17 +193,17 @@ const Sketch = (sketch: p5) => {
     const [width, height]: [number, number] = getViewportDimensions();
     sketch.stroke(artBoardDraw.getStokeColor());
     sketch.strokeWeight(artBoardDraw.getStrokeWeight());
-    if (turtle1.getTurtleX() > width) {
-      turtle1.setTurtleX(0);
+    if (turtle2.getTurtleX() > width) {
+      turtle2.setTurtleX(0);
     }
-    if (turtle1.getTurtleX() < 0) {
-      turtle1.setTurtleX(width);
+    if (turtle2.getTurtleX() < 0) {
+      turtle2.setTurtleX(width);
     }
-    if (turtle1.getTurtleY() > height) {
-      turtle1.setTurtleY(0);
+    if (turtle2.getTurtleY() > height) {
+      turtle2.setTurtleY(0);
     }
-    if (turtle1.getTurtleY() < 0) {
-      turtle1.setTurtleY(height);
+    if (turtle2.getTurtleY() < 0) {
+      turtle2.setTurtleY(height);
     }
   };
 };
@@ -210,7 +211,7 @@ const Sketch = (sketch: p5) => {
 /**
  * Class representing the Model of the Artboard component.
  */
-export default function ArtboardSketch(props: { index: number }): JSX.Element {
+export default function ArtboardSketch1(props: { index: number }): JSX.Element {
   /** Stores the value of the auto hide state. */
 
   const id = `art-board-${props.index}`;
