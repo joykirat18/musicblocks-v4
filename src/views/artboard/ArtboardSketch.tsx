@@ -18,7 +18,6 @@ export const ArtboardSketch: React.FC<P5WrapperProps> = ({ children, ...props })
   const boardSketch = (sketch: P5Instance): void => {
     // The three buttons to control the turtle
     const steps = turtleSettings.steps;
-
     // controller variables used in Draw functions (controlled by manager)
     let doMoveForward = false;
     let doRotate = false;
@@ -72,6 +71,7 @@ export const ArtboardSketch: React.FC<P5WrapperProps> = ({ children, ...props })
      * @param angle Angle by which the turtle should be rotated
      */
     async function rotateTurtle(angle: number) {
+      currentTurtle.setIsMoving(true);
       let isNegative = false;
       if (angle < 0) {
         isNegative = true;
@@ -82,6 +82,7 @@ export const ArtboardSketch: React.FC<P5WrapperProps> = ({ children, ...props })
         await sleep(turtleSettings.sleepTime);
         rotateTurtlePart(isNegative);
       }
+      currentTurtle.setIsMoving(false);
     }
 
     /**
@@ -90,10 +91,12 @@ export const ArtboardSketch: React.FC<P5WrapperProps> = ({ children, ...props })
      * @param steps Number of steps the turtle move
      */
     async function moveForward(steps: number, direction: string) {
+      currentTurtle.setIsMoving(true);
       for (let i = 0; i < steps; i++) {
         await sleep(turtleSettings.moveSleepTime);
         moveForwardPart(i, direction);
       }
+      currentTurtle.setIsMoving(false);
     }
 
     /**
@@ -120,11 +123,13 @@ export const ArtboardSketch: React.FC<P5WrapperProps> = ({ children, ...props })
      * @param angle The angle of the arc
      */
     async function makeArc(angle: number, radius: number) {
+      currentTurtle.setIsMoving(true);
       for (let i = 0; i < angle; i++) {
-        // await sleep(50);
         await sleep(turtleSettings.moveSleepTime);
         makeArcSteps(i, radius);
       }
+
+      currentTurtle.setIsMoving(false);
     }
 
     function rotate() {
